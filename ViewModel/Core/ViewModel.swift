@@ -3,15 +3,18 @@
 import Foundation
 import UIKit
 import CaamDauForm
-public protocol CD_VMProtocol {
+
+public protocol ViewModelProtocol {
     associatedtype Input
     associatedtype Output
-    func put(_ input: Input) -> Output
+    func input(_ input:Input)
+    var output:((Output)->Void)? { set get }
 }
 
 
-// 历史项目原因，依然保留使用旧的Row协议
-public protocol CD_ViewModelDataSource: CD_FormProtocol {
+
+
+public protocol ViewModelDataSource: FormProtocol {
     /// 空数据视图
     var _emptyView:((Any?) -> UIView?)? { get }
     
@@ -19,7 +22,7 @@ public protocol CD_ViewModelDataSource: CD_FormProtocol {
 }
 
 
-extension CD_ViewModelDataSource {
+extension ViewModelDataSource {
     
     public var _emptyView:((Any?) -> UIView?)? { get { nil } }
     

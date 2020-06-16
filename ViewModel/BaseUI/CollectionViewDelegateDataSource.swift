@@ -13,10 +13,10 @@ import SnapKit
 import CaamDauForm
 import CaamDauTopBar
 import CaamDauPopGesture
-//MARK:--- 针对新的表单协议 CD_CellProtocol ----------
-open class CD_CollectionViewDelegateDataSource: CD_FormCollectionViewDelegateDataSource {
-    public var vm:CD_ViewModelCollectionViewProtocol?
-    public init(_ vm:CD_ViewModelCollectionViewProtocol?) {
+//MARK:--- 针对新的表单协议 CellProtocol ----------
+open class CollectionViewDelegateDataSource: FormCollectionViewDelegateDataSource {
+    public var vm:ViewModelCollectionViewProtocol?
+    public init(_ vm:ViewModelCollectionViewProtocol?) {
         super.init(vm)
         self.vm = vm
     }
@@ -76,8 +76,8 @@ open class CD_CollectionViewDelegateDataSource: CD_FormCollectionViewDelegateDat
 
 //MARK:--- 提供一个基础的 CollectionViewController 简单的页面不需要编写 ViewController----------
 public struct R_CDCollectionViewController {
-    public static func push(_ vm:CD_ViewModelCollectionViewProtocol) {
-        let vc = CD_CollectionViewController()
+    public static func push(_ vm:ViewModelCollectionViewProtocol) {
+        let vc = CollectionViewController()
         vc.vm = vm
         vc.safeAreaTop = false
         vc.safeAreaBottom = true
@@ -85,11 +85,11 @@ public struct R_CDCollectionViewController {
     }
 }
 
-open class CD_CollectionViewController: CD_FormCollectionViewController {
-    open var vm:CD_ViewModelCollectionViewProtocol?
-    open var delegateData: CD_CollectionViewDelegateDataSource?
-    open lazy var topBar: CD_TopBar = {
-        return CD_TopBar()
+open class CollectionViewController: FormCollectionViewController {
+    open var vm:ViewModelCollectionViewProtocol?
+    open var delegateData: CollectionViewDelegateDataSource?
+    open lazy var topBar: TopBar = {
+        return TopBar()
     }()
     open lazy var bottomBar: UIView = {
         let v = UIView()
@@ -98,7 +98,7 @@ open class CD_CollectionViewController: CD_FormCollectionViewController {
     }()
     
     
-    open override var _form: CD_FormProtocol? {
+    open override var _form: FormProtocol? {
         set{
             
         }
@@ -107,7 +107,7 @@ open class CD_CollectionViewController: CD_FormCollectionViewController {
         }
     }
     
-    open override var _delegateData: CD_FormCollectionViewDelegateDataSource? {
+    open override var _delegateData: FormCollectionViewDelegateDataSource? {
         set{}
         get{
             return delegateData
@@ -121,12 +121,12 @@ open class CD_CollectionViewController: CD_FormCollectionViewController {
         vm?._bottomBarCustom?(bottomBar)
     }
     override open func makeCollectionView() {
-        delegateData = CD_CollectionViewDelegateDataSource(vm)
+        delegateData = CollectionViewDelegateDataSource(vm)
         collectionView.cd
             .register(
-                [.tCell(CD_CollectionViewCellNone.self, nil, nil),
-                .tView(CD_CollectionReusableViewNone.self, nil, .tHeader, nil),
-                .tView(CD_CollectionReusableViewNone.self, nil, .tFooter, nil)
+                [.tCell(RowCollectionViewCellNone.self, nil, nil),
+                .tView(RowCollectionReusableViewNone.self, nil, .tHeader, nil),
+                .tView(RowCollectionReusableViewNone.self, nil, .tFooter, nil)
                 ]
         )
             .register(vm?._collectionRegisters ?? [])
@@ -144,15 +144,15 @@ open class CD_CollectionViewController: CD_FormCollectionViewController {
     }
 }
 
-extension CD_CollectionViewController: CD_TopBarProtocol {
+extension CollectionViewController: TopBarProtocol {
     
-    open func topBar(custom topBar: CD_TopBar) {
+    open func topBar(custom topBar: TopBar) {
         vm?._topBarCustom?(topBar)
     }
-    open func topBar(_ topBar: CD_TopBar, didSelectAt item: CD_TopNavigationBar.Item) {
+    open func topBar(_ topBar: TopBar, didSelectAt item: TopNavigationBar.Item) {
         vm?._topBarDidSelect?(topBar, item)
     }
-    open func topBar(_ topBar: CD_TopBar, updateItemStyleForItem item: CD_TopNavigationBar.Item) -> [CD_TopNavigationBarItem.Item.Style]? {
+    open func topBar(_ topBar: TopBar, updateItemStyleForItem item: TopNavigationBar.Item) -> [TopNavigationBarItem.Item.Style]? {
         return vm?._topBarUpdate?(topBar, item)
     }
 }

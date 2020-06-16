@@ -17,15 +17,15 @@ pod 'CaamDauViewModel'
 pod 'CaamDau/ViewModel'
 ```
 ```
-/// Cell数据源遵循 CD_FormProtocol 协议
+/// Cell数据源遵循 FormProtocol 协议
 var vm:VM_**** = VM_****()
 
 /// tableView Delegate DataSource 代理类
-lazy var delegateData:CD_TableViewDelegateDataSource? = {
-    return CD_TableViewDelegateDataSource(vm)
+lazy var delegateData:TableViewDelegateDataSource? = {
+    return TableViewDelegateDataSource(vm)
 }()
 
-/// 代理设置为 CD_FormTableViewDelegateDataSource
+/// 代理设置为 FormTableViewDelegateDataSource
 tableView.delegate = delegateData
 tableView.dataSource = delegateData
 

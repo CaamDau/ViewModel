@@ -13,10 +13,10 @@ import SnapKit
 import CaamDauForm
 import CaamDauTopBar
 import CaamDauPopGesture
-//MARK:--- 针对新的表单协议 CD_CellProtocol ----------
-open class CD_TableViewDelegateDataSource: CD_FormTableViewDelegateDataSource {
-    public var vm:CD_ViewModelTableViewProtocol?
-    public init(_ vm:CD_ViewModelTableViewProtocol?) {
+//MARK:--- 针对新的表单协议 CellProtocol ----------
+open class TableViewDelegateDataSource: FormTableViewDelegateDataSource {
+    public var vm:ViewModelTableViewProtocol?
+    public init(_ vm:ViewModelTableViewProtocol?) {
         super.init(vm)
         self.vm = vm
     }
@@ -75,8 +75,8 @@ open class CD_TableViewDelegateDataSource: CD_FormTableViewDelegateDataSource {
 
 //MARK:--- 提供一个基础的 TableViewController 简单的页面不需要编写 ViewController----------
 public struct R_CDTableViewController {
-    public static func push(_ vm:CD_ViewModelTableViewProtocol) {
-        let vc = CD_TableViewController()
+    public static func push(_ vm:ViewModelTableViewProtocol) {
+        let vc = TableViewController()
         vc.vm = vm
         vc.safeAreaTop = false
         vc.safeAreaBottom = true
@@ -84,11 +84,11 @@ public struct R_CDTableViewController {
     }
 }
 
-open class CD_TableViewController: CD_FormTableViewController {
-    open var vm:CD_ViewModelTableViewProtocol?
-    open var delegateData:CD_TableViewDelegateDataSource?
-    open lazy var topBar: CD_TopBar = {
-        return CD_TopBar()
+open class TableViewController: FormTableViewController {
+    open var vm:ViewModelTableViewProtocol?
+    open var delegateData:TableViewDelegateDataSource?
+    open lazy var topBar: TopBar = {
+        return TopBar()
     }()
     open lazy var bottomBar: UIView = {
         let v = UIView()
@@ -97,7 +97,7 @@ open class CD_TableViewController: CD_FormTableViewController {
     }()
     
     
-    open override var _form: CD_FormProtocol? {
+    open override var _form: FormProtocol? {
         set{
             
         }
@@ -106,7 +106,7 @@ open class CD_TableViewController: CD_FormTableViewController {
         }
     }
     
-    open override var _delegateData: CD_FormTableViewDelegateDataSource? {
+    open override var _delegateData: FormTableViewDelegateDataSource? {
         set{}
         get{
             return delegateData
@@ -120,7 +120,7 @@ open class CD_TableViewController: CD_FormTableViewController {
         vm?._bottomBarCustom?(bottomBar)
     }
     override open func makeTableView() {
-        delegateData = CD_TableViewDelegateDataSource(vm)
+        delegateData = TableViewDelegateDataSource(vm)
         super.makeTableView()
         self.cd.navigationBar(hidden: true)
         self.stackView.insertArrangedSubview(topBar, at: 0)
@@ -134,14 +134,14 @@ open class CD_TableViewController: CD_FormTableViewController {
     }
 }
 
-extension CD_TableViewController: CD_TopBarProtocol {
-    open func topBar(custom topBar: CD_TopBar) {
+extension TableViewController: TopBarProtocol {
+    open func topBar(custom topBar: TopBar) {
         vm?._topBarCustom?(topBar)
     }
-    open func topBar(_ topBar: CD_TopBar, didSelectAt item: CD_TopNavigationBar.Item) {
+    open func topBar(_ topBar: TopBar, didSelectAt item: TopNavigationBar.Item) {
         vm?._topBarDidSelect?(topBar, item)
     }
-    open func topBar(_ topBar: CD_TopBar, updateItemStyleForItem item: CD_TopNavigationBar.Item) -> [CD_TopNavigationBarItem.Item.Style]? {
+    open func topBar(_ topBar: TopBar, updateItemStyleForItem item: TopNavigationBar.Item) -> [TopNavigationBarItem.Item.Style]? {
         return vm?._topBarUpdate?(topBar, item)
     }
 }
